@@ -1,0 +1,341 @@
+\documentclass{ieeeaccess}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+
+\usepackage{graphicx}
+\usepackage{textcomp}
+
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+\history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
+\doi{10.1109/ACCESS.2017.DOI}
+
+
+\title{\centering{Modeling and Analyzing for Performance Interference Propagation in NFV }}
+\author{\centering{\uppercase{Dong Zhang}\authorrefmark{1},\uppercase{Xiyi Pan\authorrefmark{2},and WeiWei Lin}.\authorrefmark{3}}}
+
+
+\begin{abstract}
+The proposal of network function virtualization(NFV) promotes network functions to run on commodity hardware (i.e., industry standard servers, storage, and switches) in the form of software applications, which perfectly decouples the software implementation of network functions from the underlying hardware and reduce capital investment and energy consumption. Typically, a user request needs to be processed through multiple different virtual network functions with an order. These virtual network functions are logically linked into a Service Function Chain(SFC) to provide special services. Network carriers usually orchestrate logical virtual network functions to physical resources with different purpose, such as improving resource utilization or minimizing SLA violations, etc. On one hand, the rapid growth of IP traffic and dynamic changes in network traffic make the resource allocationg problem more difficult. On the other hand, the interaction for different resource contention between SFCs make the orchestration result keep away from Network carrier's initial purpose. In present, the performance analysis method is at the VNF level, and the calculation of the delay and throughput of the user request is a simple addition after the request processing is completed. It ignore the propagation of performance interference, which will inevitably lead to incorret performance analyzsis and wrong mapping policy. In view of the above problems, this paper proposes a SFC performance inference propagation analysis algorithm. Based on the flow information of the requested service function chain and the global physical resource usage, a global sfc performance impact calculation analysis is performed on the newly arrived sfc request, which provide a reference for different mapping purpose and  monitor sfc's mapping performance indirectly prevent causing serious SLA violation.
+\end{abstract}
+
+\begin{keywords}
+Network Function Virtualization, Service Function Chain, Performance Interference Propagation,Performance monitoring.
+\end{keywords}
+
+\titlepgskip=-15pt
+\maketitle
+
+\section{Introduction}
+\label{sec:introduction}
+\PARstart{I}{n} modern world, with the rapid progress of technology, the internet is becoming an indispensable part of human’s day to day life. As richer feature types and higher quality of services is needed for people, it is well know that management of today’s network and bringing into new services into current network is becoming increasing difficult and expensive. The forwarding equipment in the traditional network is tightly combined with logical control and the increasingly large network system, which makes it difficult for the developing and configuration on today’s networks. Software Defined Network(SDN)\cite{b1} is a new network paradigm that was recently proposed to overcome the drawbacks of the current network infrastructures. At the same time, motivated by the advances of virtualization, several major telecom operators embarked on an effort to combine virtualization with carrier network infrastructures and drafted  the first white paper for Network Function Virtualization(NFV)\cite{b2}.
+
+SDN gives the hope to replace traditional network and change the limitations of current network infrastructures. By means of SDN paradigm, network carriers can separate the network control plane from the data plane compared to current networks where the IP layer integrate both planes vertically into the physical devices. In the SDN controller plane, a core brain software named SDN Controller, which make decisions on how to steer flows through physical devices and deploy related network policy. On the other hand, with the separation of logic control and forwarding, the physical network switch become simple forwarding devices, via the well defined southbound interface realize communication with the controller plane\cite{b3}. By breaking vertical integration, SDN can simplify the complexity of network management and facilitate network configuration, development and fostering innovation, provide flexibility in network enforcement as well\cite{b3}.
+
+By decoupling Network Functions from vendor-specific and traditional proprietary dedicated middle box, NFV can bring lots of benefits to network carriers, strongly changing the infrastructure of today’s network. First of all, depending on the Common-Off-The-Shelf commodity servers instead of proprietary middle box, NFV has the potential to reduce the cost of expensive network equipment and decrease Capital Expenditures(CAPEX)\cite{b4}. Second, for new network service, NFV paradigm would greatly reduce the cycles of innovation and deployment, providing user service more quickly. What’s more, NFV would increase network flexibility for fast service delivery, an option complicated to achieve with traditional proprietary equipment\cite{b5}. Moreover, by automating the operational process, NFV can reduce Operating Expenditures(OPEX)\cite{b6} cost and improve efficiency as well as prevent middle boxes sprawl.
+
+According to Mijumbi et al. (2016) \cite{b7}, ``NFV and SDN have a lot in common, since they both advocate for a passage toward open software and network hardware.'' Though NFV and SDN have different purpose, but they both do indeed complement each other and enable of providing one consolidated solution for the evolution of network. The integration of NFV and SDN have been studied in many different environment(e.g., 5G, Cloud Computing, Fog Computing, Wide Area Network, etc.). Lastly, the instantiation of new network function rely on NFV, while the connection of VNFs and forwarding traffic to newly instantiated Network Functions need the help of SDN, both of them are expected to integrated in future networks for supporting SFC. Service Function Chain(SFC)\cite{b9} is defined by the Internet Engineering Task Force (IETF) as a set of interdependent service functions(SFs) process user request flows along a predefined ordered list of VNFs. In the context of Network Function Virtualization(NFV) and Software Defined Network(SDN), Virtual Network Functions(VNFs) in a SFC are deployed on virtual machines and enable of interconnecting by SDN to achieve minimum cost and maximum profit for ISP.
+
+Along with the benefits of NFV, different NFs may face numerous difficulties and challenges while moving towards network function virtualization. Meanwhile, A fundamental challenge is that the performance of processing traffic flows through virtual network function on standard high volume commodity servers  may not achieve the same or a comparable performance as proprietary delicate middle box. Many research efforts have been devoted to improving the performance of virtual network functions hosted on standard commercial servers in order to improve quality of service and decrease Service Level Agreement(SLA) violations. For example, single root I/O virtualization (SR-IOV)\cite{b10} , Intel data-plane development kit (DPDK)\cite{b11} and Open DataPlane\cite{b12} are proposed for virtual interface of data transfer with high-performance.	NetVM built based on DPDK high-throughout packet processing\cite{b13}, ClickOS\cite{b14}  has been developed based on Xen hypervisor and Click modular\cite{b15} router software, which are high performance NFV platform mainly focus on enhancing performance of individual VNFs. No matter Service Function Chain Resource Allocation(SFCRA) algorithms or VNF Placement(VNFP) algorithms take performance issues into consideration at first\cite{b16,b17,b18}. In \cite{b19}, the author seek to find a orchestration scheme that can guarantee performance for every service function chain with flexible demand in underlying physical networks. In short, SFC performance assurance issues are paramount, which is the key to replace traditional network and promote NFV paradigm development. Even though exciting progress has been made toward high-performance provisioning in SFC, there still lack of performance monitoring algorithm or monitoring model to discover performance issues or even locate performance root cause in time.
+
+In fact, monitoring key performance is always vital in network research area. By taking advantage of monitoring key performance metrics, network operator can dynamically obtain real network function performance status and using the data that violated SLA to trigger dynamic adjustment of vitualization network function resource allocation and SFC forwarding path choose. With the advantage of monitoring key performance described above, operators can maintain acceptable application performance levels for users and locate root cause of performance issues in time (or even ahead of time to decrease SLA violations).
+
+SFC performance monitoring seems to be easy. For example, to monitor the delay, you only need to monitor the performance of each VNF, and then simply add all the VNF delays and link delays to get the delay statistics of entire SFC. And then compare the obtained processing delay with the delay required by the user. If the processing delay is greater than the delay required by the user, the corresponding network policy of SLA violation will be triggered. However, how can we obtain possible performance violation in advance, and how to use performance inference analysis to help network operators close to different orchestration purpose?
+
+This is not a trivial matter, because of several factors lead to the problem more complex. Firstly, the processing of user request service involving multiple VNF resources along the relevant sfc forwarding path. These VNFs not only require different types of resources, they may also require different amounts. On the other hand, in order to improve resource utilization, Network Service Providers(NSPs) usually deploy multiple VNFs on a common commodity server to achieve resource sharing, which make each resource on the server has different type of contenders. What’s more, The dynamic change of network traffic and the mutual influence between sfc are another reason for the difficulty in locating sfc performance problems.
+
+In this paper, we focus on proposing a SFC performance interference analysis algorithm for monitoring sfc key performance metrics thereby benefiting the orchestration adjustment as well as reducing SLA violation. To the best of our knowledge, we are the first to design such a related SFC performance interference algorithm for inferencing key performance metrics and decreasing SFC performance violation.
+The rest of the paper is organized as follows. Section II described related work about monitoring sfc performance and locating performance issues, Section III presents the conventional model including a model description and related algorithm for caculating and analyzing the SFC performance interference propagation. Section IV shows a numerical evaluation. Finally, Section V summarize the paper and provides some directions for future research.
+
+\section{RELATED WORK}
+Many prior studies have investigated sfc performance detection problems.
+P Naik et al.\cite{b19} proposed a performance monitoring and bottleneck detection tool for NFV. They computes per-hop throughputs and delays by sniffing the packets on all VM-toVM communication paths and use ``black box'' measurements alone to identify performance bottlenecks in as real time. In terms of practicality, the tool for NFV performance detection is very commendable. However, NFVPerf need to deploy dedicated agent for every virtual machine and to collect a great deal of flow statistic for calculating the delays and throughput, which consumed a large number of expensive physical resources such as bandwith and CPU. This mechanism not enable of warning ahead of time for orchestration adjustment and optimizing the performance of sfc.
+
+Zeng C et al.\cite{b20} investigate the performance interference among different types of co-located VNFs and analyze how VNF’s competitive hardware resources and the characteristic of packet affect the performance interference. According to the measurement results, a more effective VNF placement method is given, which has significant practical significance for the research and placement of virtual network functions. Beye F et al.\cite{b21} use machine learning technique which is fed using data generated from automatized offline performance measurements to enable fast and accurate performance prediction for VNFs. Their prediction approach has a flaw that massive flow statics must been collected for differrent NFV frameworks to train models and once there is an adjustment for network functions or physical equipments in dataplane, operators have to retrain their related machine learning model which cost too much extra capital expenditure and time. J Nam et al.\cite{b22} develop a system named Probius that automatic analyzes VNFs in various service function chain and possible reason out performance uncertainties.
+
+\section{Network and Problem Model}
+In this section, we formalize the problem of inferring sfc performance issues in advance and design a dynamic deduce algorithm for possible sfc performance.
+
+\subsection{Network Model}
+We modeled the substrate network with an undirected graph $G_{s}=\left ( N_{s},E_{s} \right )$ where $N_{s}$ is the set of substrate nodes and $E_{s}$ refer to the set of substrate links.Each substrate node $n_{u}$ is capable of hosting some VNF nodes. $C_{u}$ denoted the computing capcity((i.e., CPU)) of substrate node $n_{u}$ , which indicates the available computing resources for hosting VNFs and define $M_{u}$ as the available memory resources. For each substrate link $E_{u,v} \in E_{S}$, $(u,w \in N_{S})$, $ B_{u,w}\in Z^{+} $ represent  the available bandwidth of $E_{u,w}$.
+
+Supposed that there are $\varphi$  NFV service request in network,denoted them as a set $Req=\left \{ {\varsigma}^{1},{\varsigma}^{2},...,{\varsigma}^{\varphi}  \right \} $. The $\kappa-th$ NFV service request is represented as 5-tuple  ${\varsigma }_{\kappa }=\left ( Nv_{\kappa},Ev_{\kappa},Rcpu_{\kappa},Rmem_{\kappa},Rbd_{\kappa} \right )$, where $Nv^{\kappa}=\left (vn_{1}^{\kappa},vn_{2}^{\kappa},...,vn_{t}^{\kappa} \right )$ is the ordered set of required VNF nodes and $Ev^{\kappa}=\left ( e_{1}^{\kappa},e_{2}^{\kappa},...,e_{t-1}^{\kappa} \right )$ is the set of virtual links that connect VNF nodes. And the $i-th$ $e_{i}^{\kappa}$ will connect the nodes $vn_{i}^{\kappa}$ and $vn_{i+1}^{\kappa}$. $Rcpu^{\kappa}=\left ( c_{1}^{\kappa},c_{2}^{\kappa},...,c_{t}^{\kappa} \right )$ is the set of required computing resource,where $c_{i}^{\kappa}$   represents the computing resource required for node $vn_{i}^{\kappa}$.Similar to the set of $Rcpu^{\kappa}$,$Rmem^{\kappa}=\left ( m_{1}^{\kappa},m_{2}^{\kappa},...,m_{t}^{\kappa} \right )$ is the set of required memory resource for each node $vn_{i}^{\kappa}$,respectively.Lastly, $Rbd^{\kappa}=\left ( bd_{i,j}^{\kappa}|\left ( i,j \right )\in Ev^{\kappa},v_{i}^{\kappa},v_{j}^{\kappa} \in Nv^{\kappa} \right )$ represents the set of bandwidth requirement,where $bd_{i,j}^{\kappa} $ is the bandwidth required for link $\left( i,j \right)$ of the ${\kappa-th}$ SFC request.
+
+In our investigation of virtual network function performance inference, total delay is used as the performance metrics of the possible performance issue of SFC, which mainly consist of processing delay and transmission delay. Therefor, we will consider part of the node delay and the delay of communication between nodes in our problem model. In this research, both network delay and processing delay are considered at the same time. The so-called network delay is determined by the size and capacity of propagation delay and transmission delay brought by resource allocation and scheduling. The transmission delay is determined by packet size and transmission capacity that computed with $D_{i} \div b_{i}$   in which $D_{i}$ is the size of packet and $b_{i}$ is is the available transmission rate. The propagation delay is the delay caused by the path selection of source and destination nodes during resource scheduling. The specific delay is determined by the correspond network topology and transmission mode. In more detail, the overall network service delay also needs to include the queue delay. The queue delay is mainly determined by the output interface link load and adjustment strategy, queue model (such as the classic M/M/1 model\cite{b23}) as well as the size of buffer area.There are a great deal of studies on the queue of packet which will be outside the scope of this article.For simplicity, we only consider processing delay and transmission delay, which are denoted as $T_{ideal}$ and $T_{ideal_tran}$ ,respectively.
+
+\subsection{Problem Formulation}
+We start with the network architecture described in the previous section, namely, a substrate network consist of a set of physical nodes(e.g. servers or switchs etc.), each of which can holds one or more virtual machines to run virtual network functions. In the interest of simulation of real network application scenarios,we assume that the physical server environment is heterogeneous. Typically, Heterogeneous environment where physical machines may have different resource capacities, e.g.,CPU, memory etc. enable flexible deployment of PMs to improve resource utilization. From the above, we defined SFC as an ordered set of interdependent SFs process user request flows while SF will realize through virtualization technology that we abstract it as virtual network function(VNF). Generally, each virtual machine holds one VNF application on physical machines. Due to workload changes, resources used by VMs, (memory, disk, computing capability etc.) will vary, possibly leading to SLA violations. In the interest of simplification of presentation, we only take the delay performance into our investigation while take other performance metrics as future work.Specifically, we supposed that network provides services for the set of NFV service request  $Req$. At the same time, a new user request  ${\varsigma}^{i}$  arrives which consume a certain amount of resources along with the corresponding service function chain and may form competition with the original service request. The objective of our research is to design algorithms that will be able to analyze the influence level that processing new user request ${\varsigma}^{i}$  for each original exist service function chain as well as locate possible root cause of performance issues, which provide reference for orchestration adjustment and reducing the probability of SLA violations.
+
+In order to understand the problem more vividly, we will combine Figure 1 and Table 1 with an easy example to present the problem.
+
+\Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt)[width=3 in]{example-for-sfc-effect-compute.png}
+{Example for illustrating performance interference propagation problem.\label{fig1}}
+
+As illustrated in Figure 1, there are four virtual network functions, denoted as NF1, NF2, NF3, NF4, respectively. Between different VNF nodes, the black solid line arrows indicates the logical path that current VNF node forward packets to next VNF node for further processing. In addition, S1, S2, S3 are three physical servers,each of which contains a certain amount of resources, which can be used  by virtual machine to host virtual network functions.Similarly, the black solid line represent  physical link used to connect the physical servers and the black dotted line represents the VNF mapping to the corresponding physical nodes. Assumed that there are three SFC in Figure 1, namely, NF1->NF2->NF4, NF1->NF3->NF4, NF1->NF3->NF2, which are called Service Chain1, Service Chain2, Service Chain3. Moreover, We will use the shortest path first(SFP) algorithm to map the links between virtual network function nodes to actual physical links such that the virtual link NF3->NF2 will map the physical link $\left \langle S2,S1 \right \rangle$ instead of the physical link $\left \langle S2,S3,S1 \right \rangle$.
+
+\begin{table}
+\Large
+\caption{\centering Ideal Processing Time}
+\begin{tabular}{p{2cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}}
+\hline
+NF & SC 1 & SC 2 & SC 3 \\
+ \hline
+NF1 & t & 2t & 4t \\
+\hline
+NF2 & 3t & - & t \\
+\hline
+NF3 & - & 2t & t  \\
+\hline
+NF4 & 2t & 2t & 2t \\
+\hline
+\end{tabular}
+\end{table}
+
+Table 1 shows the ideal time of network function required by each network function for processing each unit packet and we assumed that the minimum time slice is $t$. Presumed that the computing resource of S1 is 45 and Service Chain1, Service Chain2, Service Chain3 are processing 6, 2, 2 unit packets, respectively. In addition,We assumed that Service Chain1, Service Chain2 and Service Chain3 requires NF1 to provide 3, 4, 6 units of computing resource, respectively. At some point, there is a new user request which required Service Chain 3 providing service with 3 unit packets to process. In the interest of simplification of presentation,we do not consider server load influencing factors that will be discussed in detail in the next section and only consider computing resource which influence the processing delay. Similarly, other resources(e.g. memory, Network I/O bandwidth etc.) that influence the processing delay will consider the same as computing resource. Of course, to some extent, the analysis of transmission delay affected by bandwidth resources is the same as processing delay. Unit data packets of different service function chains will consume physical resources on a fair basis. Thus, The computing resources allocated by Service Chain1, Service Chain2, and Service Chain3 on NF1 are 12, 8, and 24, respectively. According to the weight ratio, the impacts of Service Chain1, Service Chain2, and Service Chain3 on NF1 are 0.17, 0, and 0.2, respectively.Next, the link delay impact and the processing delay impact of other nodes are calculated in a similar manner to obtain the overall delay impact of each SFC. The specific calculation method will be described in the problem model.
+
+\subsection{Problem Model}
+In this section, we will describe the overall delay calculation method in detail while analyzing the impact of physical server load on the delay, and discuss the performance impact of resource competition between service functions. Supposed that there are $m$ Service Chain in network, denoted them as a set $SC=\left \{ sfc_{1},sfc_{2},...,sfc_{m} \right \}$ and define $VF=\left ( vf_{1},vf_{2},...,vf_{n} \right )$ as the  set of $n$ VNF nodes. For each service request ${\varsigma}^{\kappa}$ ,$Nv^{\kappa}\subseteq VF,Nv^{\kappa}\equiv sfc_{i},\exists {\kappa} \in |Req|,\exists i \in |SC|$.
+
+First of all, the objective is to find out the SFC that affected most by the new user request,which can be described as Eq.(1). Among them,$T_{real_{i}}$ is the infered real delay of the $i-th$ SFC while $T_{ideal_{i}}$ is the ideal delay of the ${i-th}$ SFC which will  predefined by operator according to user requirement as ideal processing delay in Table 1. To calculate $T_{real_{i}}$ , we  consider the processing delay of VNF node denoted as $Tpro_{i}$ and the transition time in the link presented as $Tran_{i}$ which are described as Eqs. (2),(3) and (4). $R_{bd_{j,j+1}}^{ij}$ represents the required bandwidth resource from the $j-th$ VNF to the $j-th$ SFC while $AR_{bd_{j,j+1}}^{ij}$ described that the actually allocated bandwidth for $R_{bd_{j,j+1}}^{ij}$. $\iota _{u,v}$ is a binary variable that equals 1 if the virtual link $\left \langle vf_{j},vf_{j+1} \right \rangle$ map to physical link  $\left \langle u,v \right \rangle$ and 0 otherwise.
+$R_{cpu}^{ij}$ and $R_{mem}^{ij}$ are required computing resource and required memory resource of the ${j-th}$ VNF of ${sfc}_{i}$ ,respectively. $AR_{cpu}^{ijk}$ and $AR_{mem}^{ijk}$ are the actual allocated computing resource and memory resource for the $j-th$ VNF of  ${sfc}^{i}$,respectively.Eqs. (5),(6) and (7) are the calculation formulation for $R_{cpu}^{ij}$, $R_{mem}^{ij}$ and $R_{bd_{j,j+1}}^{ij}$. If $sfc_{i}$ is a service provision of ${\varsigma}^{\kappa}$, we have $\gamma _{i}^{\kappa}$ as 1 and 0 otherwise. In Eqs. (9) and (10) are the calculation formulation for total processing delay and total link delay of ${\varsigma}^{\kappa}$, respectively, while $Tpro_{ij}$ and $Tran_{i}^{j,j+1}$ denoted the processing time for VNF node $vf_{j}$ and  the total transition delay for the link $\left \langle vf_{j},vf_{j+1} \right \rangle$ of $sfc_{i}$.Eqs. (12) , (13) and (14)  are the constraints for computing resources, memory resources, and bandwidth resources. If the $j-th$  VNF of $sfc_{i}$ have mapped to $n_{k}$, we have $\tau _{ij}^{\kappa}$ as 1 and 0 otherwise.
+
+\begin{equation}E_{sfc_{i}}=\frac{\left ( T_{real_{i}-T_{ideal_{i}}} \right )}{T_{ideal_{i}}},i \in \left [ 1,|SC| \right ].\label{eq1}
+\end{equation}
+
+\begin{equation}
+T_{real_{i}}  =Tran_{i}+Tpro_{i},i \in \left [ 1,|SC| \right ].
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+&Ttran_{i}^{j,j+1}=\frac{R_{bd_{j,j+1}}^{ij}}{AR_{bd_{j,j+1}}^{ij}}\times T_{ideal\_tran}^{ij},\\
+&v,u \in \left [ 1,|E_{S}| \right ],j,j+1 \in \left [ 1,|sfc_{i}| \right ],i \in \left [ 1,|SC| \right ].\label{eq}
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+&Tpro_{ij}=\frac{1}{2} \times Max\left ( \frac{R_{cpu}^{ij}}{AR_{cpu}^{ijk}},\frac{R_{mem}^{ij}}{AR_{mem}^{ijk}} \right )\times \delta _{z} \\
+& \times T_{ideal\_pro}^{ij} \dotplus \frac{1}{2} \times \theta _{k} \times T_{ideal\_pro}^{ij},\\
+& k \in \left [ 1,|N_{S}| \right ],j \in  \left [ 1,|sfc_{i}| \right ],i \in \left [ 1,|SC| \right ].
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+  \begin{aligned}
+    R_{cpu}^{ij}&= \sum_{\kappa=1}^{m}c_{j}^{\kappa} \gamma_{i}^{\kappa}, i \in \left [ 1,|SC| \right ],\\
+    &j \in \left [ 1,|sfc_{i}| \right ],\kappa \in \left [ 1,|Req| \right ]
+  \end{aligned}
+\end{equation}
+
+\begin{equation}
+  \begin{aligned}
+    R_{mem}^{ij}&= \sum_{\kappa=1}^{m}m_{j}^{\kappa} \gamma_{i}^{\kappa}, i \in \left [ 1,|SC| \right ],\\
+    &j \in \left [ 1,|sfc_{i}| \right ],\kappa \in \left [ 1,|Req| \right ]
+  \end{aligned}
+\end{equation}
+
+\begin{equation}
+  \begin{aligned}
+    R_{bd}^{ij}&= \sum_{\kappa=1}^{m}bd_{u,u+1}^{\kappa} \gamma_{i}^{\kappa}, u,u+1 \in Nv^{\kappa}, \\
+    &i \in \left [ 1,|SC| \right ], j \in \left [ 1,|sfc_{i}| \right ],\kappa \in \left [ 1,|Req| \right ]
+  \end{aligned}
+\end{equation}
+
+\begin{equation}
+  \begin{aligned}
+\theta _{k}=\frac{L_{k}-n_{k}+\frac{\sqrt{\left ( L_{k}-n_{k} \right )^{2}+\epsilon  }}{1-L_{k}}}{L_{k}-L_{n}},k \in \left [ 1,|N_{S}| \right ]
+  \end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+Tpro_{i}=\sum_{j=1}^{N}Tpro_{ij},i \in \left [ 1,|SC| \right ],N=|sfc_{i}|
+\end{aligned}
+\end{equation}
+
+% 第10个公式%
+\begin{equation}
+  \begin{aligned}
+Ttran_{i}=\sum_{j=1}^{N-1}Ttran_{i}^{j,j+1},i \in \left [ 1,|SC| \right ],N=|sfc_{i}|
+  \end{aligned}
+\end{equation}
+
+\begin{equation}
+  \begin{aligned}
+  L_{k}=Max(\frac{u_{mem}^{k}}{M_{k}},\frac{u_{cpu}^{k}}{C_{k}}),k \in \left [ 1,|N_{S}| \right ]
+  \end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+\sum_{i=1}^{m}\tau _{ij}^{k}c_{ij}^{k}\leq C_{k},j \in \left [ 1,|sfc_{i}| \right ],k \in \left [ 1,N_{S} \right ]
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+\sum_{i=1}^{m}\tau _{ij}^{k}m_{ij}^{k}\leq M_{k},j \in \left [ 1,|sfc_{i}| \right ],k \in \left [ 1,N_{S} \right ]
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+&\sum_{i=1}^{m}\tau _{i,j}^{k}\tau _{i,j+1}^{k}bd_{j,j+1}^{k}\leq B_{j,j+1},\\
+&j\in \left [ 1,|sfc_{i}|-1 \right ],k \in \left [ 1,N_{S} \right ]
+\end{aligned}
+\end{equation}
+
+Few research efforts consider the impact of the load on physical server. Eqs. (4) we introduce the $\theta _{k}$ denoted load impact of the $k-th$ server while in Eqs.(8)  we described the calculation of the load impact. The equation (8) approximates the non-linear behavior of the ideal processing time impact as it related to the maximum resource load impact on the $k-th$ physical machine. $L_{k}$ denoted the maximum resource utilization impact. And the $n_{k}$ is the knee of the system beyond which the impact will rise exponentially and approaches infinity gradually. The variable $\epsilon >0$  is the harmonic parameter used to adjust the initial graph. In [24] authors have used a similar function to describe the relation between customer utility associated with a given allocation of resources and the response time while the function is a linear growth before the inflection point.In order to model application scenarios in real systems as depicted in Figure 2, we propose equation (1) which asymptotic increase as utilization moves close to 1.
+
+\Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt)[width=3 in]{server_load_change.png}
+{ Load Effecting VS Applied Load on a system dimension.\label{fig2}}
+
+
+\subsection{Algorithm Design}
+For each new user service request, We design the following algorithm to calculate the influence level of each SFC.
+
+
+
+\floatname{algorithm}{Algorithm}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\begin{algorithm}
+	\caption{SFC Performance Impact Propagation Analysis Algorithm}
+	\begin{algorithmic}[1] %每行显示行号
+		\Require $G_{s}=\{N_{s},E_{s}\}$,$\varsigma ^{\kappa }$
+		\Ensure ${E}=\{{E_{sfc_{1}}},{E_{sfc_{2}}},...,{E_{sfc_{n}}}\}$
+
+		\For{each $vn_{i}^{\kappa }$,$bd_{i,j}^{\kappa }$ in  $\varsigma ^{\kappa } $}
+		\State {allocate resource for $vn_{i}^{\kappa }$ and $bd_{i,j}^{\kappa }$}
+		\State {caculate $R_{cpu}^{ij }$,$R_{mem}^{ij }$ and $R_{bd_{j,j+1}}^{ij }$ after mapping $\varsigma ^{\kappa }$}
+		\EndFor
+
+		\For{each $n_{k}$ in $N_{s}$ }
+		\State {caculate $\theta_{k}$ for server $n_{k}$}
+		\If {$C_{k} < Threshold_{k}^{cpu}$}
+		\For{each $vf_{j}$ in $n_{k}$}
+		\If {$vf_{j}$ in $n_{k}$}
+		\State get competition impact factor $\delta_{z}$
+		\State {caculate $Tpro_{ij}$   with $\theta_{k}$ and $\delta_{z}$}
+		\EndIf
+		\EndFor
+		\Else
+			\State {$Tran_{i}^{j}  \gets T_{ideal_pro}^{ij}$}
+		\EndIf
+		\EndFor
+
+		\For{each $E_{u}^{w}$ in $E_{s}$}
+		\If{$B_{u,w} < 0$}
+		\State {reallocate link resource with fair competition princciple}
+		\For{each $\left \langle vf_{j},vf_{j+1} \right \rangle$  in  $E_{u}^{w}$}
+		\If{$\left \langle vf_{j},vf_{j+1} \right \rangle$ in  $sfc_{i}$}
+		\State {caculate $Tran_{i}^{j,j+1}$}
+		\EndIf
+		\EndFor
+		\Else
+		\State {$Tran_{i}^{j,j+1}  \gets T_{ideal_tran}^{ij}$}
+		\EndIf
+		\EndFor
+		\For{each ${E_{sfc_{i}}}$ in SC}
+		\State {$E_{sfc_{i}} \gets \left (Tran_{i}+Tpro_{i}  \right ) /T_{ideal_{i}}$ }
+		\State { ${E} \gets {E_{sfc_{i}}}$}
+		\EndFor
+		\State {return ${E}$}
+	\end{algorithmic}
+\end{algorithm}
+
+
+
+\section{EXPERIMENTS AND RESULTS}
+In this section, we will describe the details of the experiment and give some numerical results. Our experiments use C++ language to simulate VNF mapping problem based on different resource allocation algorithm and verify the feasibility of our sfc effect caculation model. We based on Iterative Greedy Algorithm(IGA), Simulated Annealing Algorithm(SAA) and Genetic Algorithm(GA) to allocate resource for different user request. Then, we compute different sfc affecting level according different mapping algorithm with different size of physical network.
+
+Figure 3 illustrate the detail of average sfc impact for every SFC mapping based on IGA,SAA and GA in 5, 10, 20, 30 substrate physical network nodes scale. For each fixed number of physical nodes, we will randomly generate a proper number of corresponding links to connect substrate nodes composing substrate network. After that, We randomly generate 500 sets of service test requests, each set of requests has a certain probability to cause sfc impact propagation. At the same time,we conducted multiple sets of experiments and compute the average sfc affecting level to reduce the impact of randomness.
+
+According to the experimental results, we can infer that when the scale of network is not very large, IGA is more suitable for resource mapping which can lead to smaller SFC affecting impact. The reason may be that the SAA and GA tend to reduce the use of resources, and reserve more resources for subsequent user request.When there are few physical resources, it tends to be a compact deployment. However, as the critical link resources are quickly used up and no alternative nodes and paths can be found, the service request can only be deployed on the link with insufficient resources, resulting in the SFC affecting level risen sharply. While the IGA choose the strategy of maximizing available resources for deployment, which avoids the above-mentioned situation in a certain extent, so the average influence of SFC is much lower than the GA and SAA.
+
+With the expansion of physical topology, we find that the average level of sfc influence decreases rapidly based on the SAA and GA resource allocation, while the greedy algorithm decreases slowly. When the physical node is 20, the influence of sfc caused by the SAA and GA  is much smaller than the result of GA mapping,which is in line with the SAA and GA mapping strategy.
+
+\Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt)[width=3 in]{sfc_effect_impact.png}
+{ Average SFC Impact Effect Level.\label{fig3}}
+
+Figure 4 illustrate the average resource usage for every set of user request. From the figure, we can see that the resources used by the IGA are always greater than other algorithms.And the mapping based on GA is more stable than SAA, which is also the characteristics of the algorithms themselves. Combining Figure 3 and Figure 4, SAA seems to be more suitable for large-scale network topology deployment which can cost less resources and lead to lower sfc affecting level relatively. If you pay more attention to stability, GA will more proper instead of SAA or IGA. Last but not least, Figure 5 describe the average rate of success mapping, from which we can see the IGA algorithm need more resource but didn't get a better mapping result. In contrast, SAA and GA usually can guarantee better mapping success rate and lead to lower performance mutual impact, especially when physical node is greater than 20.
+
+
+\Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt)[width=3 in]{resource_utilization.png}
+{ Detail of Resource Utilization.\label{fig4}}
+
+
+\Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt)[width=3 in]{rate_of_success_map.png}
+{ Average Rate of Success Mapping.\label{fig5}}
+
+\section{CONCLUSION}
+ With the improvement of virtualization technology, the NFV service is provisioned in the form of a service function chain. At the same time, multiple sfc crossing mapping on the same physical node to improve resource utilization make mutual SFC performance interference more complex. Besides, as the load of the physical node gradually becomes high, which is always ignored when considering SFC mapping problem, the performance interference become more intense and innegligible. In this paper, we have presented a novel concept named SFC performance inference which is different from traditional performance monitoring analysis method. In addition, we have studied the factors that affecting SFC performance and proposed a sfc performance inference algorithm which take performance interference propagation into consideration. Based on the proposed algorithm, we did a comparative experiments with IGA, SAA and GA. By analysing the specific reason of numerical results which follow the characteristics of various mapping algorithm and verify the correctness of our algorithm. We belive that our algorithm provide a reference for orchestration adjustment and optimizing the performance of SFC.
+
+
+
+\begin{thebibliography}{00}
+
+\bibitem{b1} Feamster N, Rexford J, Zegura E. The road to SDN: an intellectual history of programmable networks[J]. ACM SIGCOMM Computer Communication Review, 2014, 44(2): 87-98.
+
+\bibitem{b2} \underline{http://portal.etsi.org/NFV/NFV\_White\_Paper.pdf}
+
+\bibitem{b3} Kreutz D, Ramos F M V, Verissimo P E, et al. Software-defined networking: A comprehensive survey[J]. Proceedings of the IEEE, 2014, 103(1): 14-76.
+
+\bibitem{b4} Xie Y , Liu Z , Wang S , et al. Service Function Chaining Resource Allocation: A Survey[J]. 2016.
+
+\bibitem{b5} Batista D M, Blair G, Kon F, et al. Perspectives on software-defined networks: interviews with five leading scientists from the networking community[J]. Journal of Internet Services and Applications, 2015, 6(1): 22.
+
+\bibitem{b6} John W, Pentikousis K, Agapiou G, et al. Research directions in network service chaining[C]//2013 IEEE SDN for future networks and services (SDN4FNS). IEEE, 2013: 1-7.
+
+\bibitem{b7} Mijumbi R, Serrat J, Gorricho J L, et al. Network function virtualization: State-of-the-art and research challenges[J]. IEEE Communications surveys \& tutorials, 2015, 18(1): 236-262.
+
+\bibitem{b8} Bonfim M S, Dias K L, Fernandes S F L. Integrated NFV/SDN architectures: A systematic literature review[J]. ACM Computing Surveys (CSUR), 2019, 51(6): 1-39.
+
+\bibitem{b9} Quinn P, Nadeau T. Problem statement for service function chaining[C]//RFC 7498. RFC Editor, 2015.
+
+\bibitem{b10} SR-IOV. PCI Special Interest Group,\underline{http://www.pcisig.com/home}
+
+\bibitem{b11} Intel, “Guide: Data plane development kit for linux,” Guide, April 2015.
+
+\bibitem{b12} Linaro Networking Group, “Opendataplane introduction and overview,” January 2014.
+
+\bibitem{b13} Hwang J, Ramakrishnan K K, Wood T. NetVM: High performance and flexible networking using virtualization on commodity platforms[J]. IEEE Transactions on Network and Service Management, 2015, 12(1): 34-47.
+
+\bibitem{b14} Martins J, Ahmed M, Raiciu C, et al. ClickOS and the art of network function virtualization[C]//11th {USENIX} Symposium on Networked Systems Design and Implementation ({NSDI} 14). 2014: 459-473.
+
+\bibitem{b15} Kohler E, Morris R, Chen B, et al. The Click modular router[J]. ACM Transactions on Computer Systems (TOCS), 2000, 18(3): 263-297.
+
+\bibitem{b16} R. Cohen, L. Lewin-Eytan, J. S. Naor, and D. Raz, “Near optimal placement of virtual network functions,” in Computer Communications (INFOCOM), 2015 IEEE Conference on. IEEE, 2015, pp. 1346–1354.
+
+\bibitem{b17} M. F. Bari, S. R. Chowdhury, R. Ahmed, and R. Boutaba, “On orchestrating virtual network functions,” in Network and Service Management (CNSM), 2015 11th International Conference on, 9-13 Nov. 2015 2015, pp. 50–56.
+
+\bibitem{b18} M. Xia, M. Shirazipour, Y. Zhang, H. Green, and A. Takacs, “Network function placement for nfv chaining in packet/optical datacenters,” Journal of Lightwave Technology, vol. 33, no. 8, pp. 1565–1570, 2014.
+
+\bibitem{b19} Naik P, Shaw D K, Vutukuru M. NFVPerf: Online performance monitoring and bottleneck detection for NFV[C]//2016 IEEE Conference on Network Function Virtualization and Software Defined Networks (NFV-SDN). IEEE, 2016: 154-160.
+
+\bibitem{b20} Zeng C, Liu F, Chen S, et al. Demystifying the performance interference of co-located virtual network functions[C]//IEEE INFOCOM 2018-IEEE Conference on Computer Communications. IEEE, 2018: 765-773.
+
+\bibitem{b21} Beye F, Shinohara Y, Shimonishi H. Towards Accurate and Scalable Performance Prediction for Automated Service Design in NFV[C]//2019 16th IEEE Annual Consumer Communications \& Networking Conference (CCNC). IEEE, 2019: 1-7.
+
+\bibitem{b22} Nam J, Seo J, Shin S. Probius: Automated approach for vnf and service chain analysis in software-defined nfv[C]//Proceedings of the Symposium on SDN Research. 2018: 1-13.
+
+\bibitem{b23} Mijumbi R, Serrat J, Gorricho J L, et al. Design and evaluation of algorithms for mapping and scheduling of virtual network functions[C]//Proceedings of the 2015 1st IEEE Conference on Network Softwarization (NetSoft). IEEE, 2015: 1-9.
+
+\bibitem{b24} Chandra A, Gong W, Shenoy P. Dynamic resource allocation for shared data centers using online measurements[C]//International Workshop on Quality of Service. Springer, Berlin, Heidelberg, 2003: 381-398.
+
+\end{thebibliography}
+
+
+
+
+\EOD
+
+\end{document}
