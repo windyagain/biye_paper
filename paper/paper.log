@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.5.24)  27 JUN 2020 23:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.5.24)  6 JUL 2020 01:13
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -452,17 +452,12 @@ Overfull \hbox (9.2679pt too wide) in paragraph at lines 33--33
 Underfull \vbox (badness 5475) has occurred while \output is active []
 
 
-Underfull \hbox (badness 1661) in paragraph at lines 41--42
-[]\T1/ptm/n/n/10 By de-cou-pling Net-work Func-tions from vendor-
- []
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 <Logo.png, id=4, 206.27063pt x 53.44969pt>
 File: Logo.png Graphic file (type png)
 <use Logo.png>
-Package pdftex.def Info: Logo.png  used on input line 42.
+Package pdftex.def Info: Logo.png  used on input line 40.
 (pdftex.def)             Requested size: 91.32pt x 23.66309pt.
 
 Overfull \hbox (464.34898pt too wide) has occurred while \output is active
@@ -488,12 +483,10 @@ Underfull \hbox (badness 10000) has occurred while \output is active
 
 
  <./logo.png> <./bullet.png>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
 <notaglineLogo.png, id=15, 169.38281pt x 42.91031pt>
 File: notaglineLogo.png Graphic file (type png)
 <use notaglineLogo.png>
-Package pdftex.def Info: notaglineLogo.png  used on input line 58.
+Package pdftex.def Info: notaglineLogo.png  used on input line 54.
 (pdftex.def)             Requested size: 91.32pt x 23.1352pt.
 
 Overfull \hbox (464.34898pt too wide) has occurred while \output is active
@@ -511,48 +504,48 @@ Underfull \hbox (badness 10000) has occurred while \output is active
  []
 
 [2 <./notaglinelogo.png>]
-Underfull \hbox (badness 3965) in paragraph at lines 71--72
+Underfull \hbox (badness 3965) in paragraph at lines 63--64
 \T1/ptm/n/n/10 The $\OML/cmm/m/it/10 ^^Tth$ \T1/ptm/n/n/10 NFV ser-vice re-quest is rep-re-sented as
  []
 
 
-Underfull \hbox (badness 1668) in paragraph at lines 71--72
+Underfull \hbox (badness 1668) in paragraph at lines 63--64
 \T1/ptm/n/n/10 5-tuple $\OML/cmm/m/it/10 &[] \OT1/cmr/m/n/10 = []$\T1/ptm/n/n/10 ,
  []
 
 
-Underfull \hbox (badness 6316) in paragraph at lines 71--72
+Underfull \hbox (badness 6316) in paragraph at lines 63--64
 \T1/ptm/n/n/10 where $\OML/cmm/m/it/10 Nv[] \OT1/cmr/m/n/10 = []$ \T1/ptm/n/n/10 is the or-
  []
 
 
-Underfull \hbox (badness 3428) in paragraph at lines 71--72
+Underfull \hbox (badness 3428) in paragraph at lines 63--64
 \T1/ptm/n/n/10 dered set of re-quired VNF nodes and $\OML/cmm/m/it/10 Ev[] \OT1/cmr/m/n/10 =
  []
 
 
-Underfull \hbox (badness 2065) in paragraph at lines 71--72
+Underfull \hbox (badness 2065) in paragraph at lines 63--64
 \T1/ptm/n/n/10 nodes $\OML/cmm/m/it/10 vn[]$ \T1/ptm/n/n/10 and $\OML/cmm/m/it/10 vn[]$\T1/ptm/n/n/10 . $\OML/cmm/m/it/10 Rcpu[] \OT1/cmr/m/n/10 = []$
  []
 
 
-Underfull \hbox (badness 4505) in paragraph at lines 71--72
+Underfull \hbox (badness 4505) in paragraph at lines 63--64
 \T1/ptm/n/n/10 is the set of re-quired com-put-ing re-source,where
  []
 
 
-Underfull \hbox (badness 1748) in paragraph at lines 71--72
+Underfull \hbox (badness 1748) in paragraph at lines 63--64
 \OML/cmm/m/it/10 c[]$ \T1/ptm/n/n/10 rep-re-sents the com-put-ing re-source re-quired for
  []
 
 
-Underfull \hbox (badness 1668) in paragraph at lines 71--72
+Underfull \hbox (badness 1668) in paragraph at lines 63--64
 []$ \T1/ptm/n/n/10 rep-re-sents the
  []
 
 File: notaglineLogo.png Graphic file (type png)
 <use notaglineLogo.png>
-Package pdftex.def Info: notaglineLogo.png  used on input line 74.
+Package pdftex.def Info: notaglineLogo.png  used on input line 69.
 (pdftex.def)             Requested size: 91.32pt x 23.1352pt.
 
 Overfull \hbox (464.34898pt too wide) has occurred while \output is active
@@ -573,21 +566,21 @@ Underfull \hbox (badness 10000) has occurred while \output is active
 <example-for-sfc-effect-compute.png, id=30, 547.04375pt x 489.83pt>
 File: example-for-sfc-effect-compute.png Graphic file (type png)
 <use example-for-sfc-effect-compute.png>
-Package pdftex.def Info: example-for-sfc-effect-compute.png  used on input line 81.
+Package pdftex.def Info: example-for-sfc-effect-compute.png  used on input line 73.
 (pdftex.def)             Requested size: 216.81pt x 194.13472pt.
 File: example-for-sfc-effect-compute.png Graphic file (type png)
 <use example-for-sfc-effect-compute.png>
-Package pdftex.def Info: example-for-sfc-effect-compute.png  used on input line 81.
+Package pdftex.def Info: example-for-sfc-effect-compute.png  used on input line 73.
 (pdftex.def)             Requested size: 216.81pt x 194.13472pt.
-LaTeX Font Info:    Calculating math sizes for size <14> on input line 88.
+LaTeX Font Info:    Calculating math sizes for size <14> on input line 80.
 
-Overfull \hbox (4.8811pt too wide) in paragraph at lines 106--117
+Overfull \hbox (4.8811pt too wide) in paragraph at lines 98--109
 [][] 
  []
 
 File: notaglineLogo.png Graphic file (type png)
 <use notaglineLogo.png>
-Package pdftex.def Info: notaglineLogo.png  used on input line 120.
+Package pdftex.def Info: notaglineLogo.png  used on input line 112.
 (pdftex.def)             Requested size: 91.32pt x 23.1352pt.
 
 Overfull \hbox (464.34898pt too wide) has occurred while \output is active
@@ -607,7 +600,7 @@ Underfull \hbox (badness 10000) has occurred while \output is active
 [4 <./example-for-sfc-effect-compute.png>]
 File: notaglineLogo.png Graphic file (type png)
 <use notaglineLogo.png>
-Package pdftex.def Info: notaglineLogo.png  used on input line 174.
+Package pdftex.def Info: notaglineLogo.png  used on input line 207.
 (pdftex.def)             Requested size: 91.32pt x 23.1352pt.
 
 Overfull \hbox (464.34898pt too wide) has occurred while \output is active
@@ -628,15 +621,18 @@ Underfull \hbox (badness 10000) has occurred while \output is active
 <server_load_change.png, id=43, 578.16pt x 361.35pt>
 File: server_load_change.png Graphic file (type png)
 <use server_load_change.png>
-Package pdftex.def Info: server_load_change.png  used on input line 217.
+Package pdftex.def Info: server_load_change.png  used on input line 209.
 (pdftex.def)             Requested size: 216.81pt x 135.50592pt.
 File: server_load_change.png Graphic file (type png)
 <use server_load_change.png>
-Package pdftex.def Info: server_load_change.png  used on input line 217.
+Package pdftex.def Info: server_load_change.png  used on input line 209.
 (pdftex.def)             Requested size: 216.81pt x 135.50592pt.
+
+Underfull \vbox (badness 4217) has occurred while \output is active []
+
 File: notaglineLogo.png Graphic file (type png)
 <use notaglineLogo.png>
-Package pdftex.def Info: notaglineLogo.png  used on input line 284.
+Package pdftex.def Info: notaglineLogo.png  used on input line 274.
 (pdftex.def)             Requested size: 91.32pt x 23.1352pt.
 
 Overfull \hbox (464.34898pt too wide) has occurred while \output is active
@@ -657,36 +653,34 @@ Underfull \hbox (badness 10000) has occurred while \output is active
 <sfc_effect_impact.png, id=48, 578.16pt x 361.35pt>
 File: sfc_effect_impact.png Graphic file (type png)
 <use sfc_effect_impact.png>
-Package pdftex.def Info: sfc_effect_impact.png  used on input line 286.
+Package pdftex.def Info: sfc_effect_impact.png  used on input line 278.
 (pdftex.def)             Requested size: 216.81pt x 135.50592pt.
 File: sfc_effect_impact.png Graphic file (type png)
 <use sfc_effect_impact.png>
-Package pdftex.def Info: sfc_effect_impact.png  used on input line 286.
+Package pdftex.def Info: sfc_effect_impact.png  used on input line 278.
 (pdftex.def)             Requested size: 216.81pt x 135.50592pt.
-
-Underfull \vbox (badness 4217) has occurred while \output is active []
-
 <resource_utilization.png, id=49, 578.16pt x 361.35pt>
 File: resource_utilization.png Graphic file (type png)
 <use resource_utilization.png>
-Package pdftex.def Info: resource_utilization.png  used on input line 292.
+Package pdftex.def Info: resource_utilization.png  used on input line 284.
 (pdftex.def)             Requested size: 216.81pt x 135.50592pt.
 File: resource_utilization.png Graphic file (type png)
 <use resource_utilization.png>
-Package pdftex.def Info: resource_utilization.png  used on input line 292.
+Package pdftex.def Info: resource_utilization.png  used on input line 284.
 (pdftex.def)             Requested size: 216.81pt x 135.50592pt.
 <rate_of_success_map.png, id=50, 578.16pt x 361.35pt>
 File: rate_of_success_map.png Graphic file (type png)
 <use rate_of_success_map.png>
-Package pdftex.def Info: rate_of_success_map.png  used on input line 296.
+Package pdftex.def Info: rate_of_success_map.png  used on input line 288.
 (pdftex.def)             Requested size: 216.81pt x 135.50592pt.
 File: rate_of_success_map.png Graphic file (type png)
 <use rate_of_success_map.png>
-Package pdftex.def Info: rate_of_success_map.png  used on input line 296.
+Package pdftex.def Info: rate_of_success_map.png  used on input line 288.
 (pdftex.def)             Requested size: 216.81pt x 135.50592pt.
+LaTeX Font Info:    Calculating math sizes for size <7.61> on input line 299.
 File: notaglineLogo.png Graphic file (type png)
 <use notaglineLogo.png>
-Package pdftex.def Info: notaglineLogo.png  used on input line 300.
+Package pdftex.def Info: notaglineLogo.png  used on input line 302.
 (pdftex.def)             Requested size: 91.32pt x 23.1352pt.
 
 Overfull \hbox (464.34898pt too wide) has occurred while \output is active
@@ -703,20 +697,18 @@ Underfull \hbox (badness 10000) has occurred while \output is active
 []
  []
 
-[7 <./sfc_effect_impact.png> <./resource_utilization.png>]
-LaTeX Font Info:    Calculating math sizes for size <7.61> on input line 307.
-
-Underfull \hbox (badness 4279) in paragraph at lines 327--328
-[]\T1/ptm/n/n/7.61 Linaro Net-work-ing Group, ^^POpen-dat-a-plane in-tro-duc-tion and
+[7 <./sfc_effect_impact.png> <./resource_utilization.png> <./rate_of_success_map.png>]
+Underfull \hbox (badness 4279) in paragraph at lines 319--320
+[]\T1/ptm/m/n/7.61 Linaro Net-work-ing Group, ^^POpen-dat-a-plane in-tro-duc-tion and
  []
 
 File: bullet.png Graphic file (type png)
 <use bullet.png>
-Package pdftex.def Info: bullet.png  used on input line 358.
+Package pdftex.def Info: bullet.png  used on input line 350.
 (pdftex.def)             Requested size: 5.0pt x 14.6871pt.
 File: notaglineLogo.png Graphic file (type png)
 <use notaglineLogo.png>
-Package pdftex.def Info: notaglineLogo.png  used on input line 360.
+Package pdftex.def Info: notaglineLogo.png  used on input line 352.
 (pdftex.def)             Requested size: 91.32pt x 23.1352pt.
 
 Overfull \hbox (464.34898pt too wide) has occurred while \output is active
@@ -733,22 +725,24 @@ Underfull \hbox (badness 10000) has occurred while \output is active
 []
  []
 
-[8 <./rate_of_success_map.png>] (./paper.aux)
+[8
+
+] (./paper.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 5429 strings out of 480476
- 78579 string characters out of 5903481
- 348255 words of memory out of 5000000
- 21331 multiletter control sequences out of 15000+600000
+ 5430 strings out of 480476
+ 78594 string characters out of 5903481
+ 346255 words of memory out of 5000000
+ 21332 multiletter control sequences out of 15000+600000
  623319 words of font info for 155 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,16n,85p,2636b,398s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,16n,85p,2636b,510s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/texlive/2020/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2020/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb><c:/texlive/2020/texmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb><c:/texlive/2020/texmf-dist/fonts/type1/urw/helvetic/
 uhvr8a.pfb><c:/texlive/2020/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2020/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2020/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (8 pages, 342329 bytes).
+Output written on paper.pdf (8 pages, 340716 bytes).
 PDF statistics:
  116 PDF objects out of 1000 (max. 8388607)
  75 compressed objects within 1 object stream
